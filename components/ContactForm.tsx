@@ -31,7 +31,7 @@ export default function ContactForm() {
       return;
     }
 
-    const endpoint = process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? '';
+    const endpoint = (process.env.NEXT_PUBLIC_FORM_ENDPOINT ?? '').trim();
 
     if (!endpoint) {
       setStatus('error');
