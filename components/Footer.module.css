@@ -1,0 +1,32 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 1.5rem;
+  background: var(--color-navy-deep);
+  border-top: 3px solid var(--color-accent-orange);
+  color: #fff;
+  text-align: center;
+}
+
+.footer img {
+  height: 140px;
+  width: auto;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.35rem;
+}
+
+.footer a {
+  color: #fff;
+}
+
+.footer a:hover {
+  color: var(--color-accent-orange);
+}
+
+.footer a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
