@@ -1990,7 +1990,6 @@ export default function AdminUsers() {
   const [creating, setCreating] = useState(false);
 
   async function loadUsers() {
-    setLoading(true);
     const response = await fetch('/api/portal/admin/users');
     const body = await response.json();
     if (!response.ok) {
