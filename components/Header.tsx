@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import styles from './Header.module.css';
 
 const NAV_LINKS = [
@@ -25,6 +26,7 @@ export default function Header() {
             {link.label}
           </a>
         ))}
+        <Link href="/portal">Login</Link>
       </nav>
 
       <a className={styles.cta} href="#contact">
@@ -48,6 +50,9 @@ export default function Header() {
               {link.label}
             </a>
           ))}
+          <Link href="/portal" onClick={() => setMenuOpen(false)}>
+            Login
+          </Link>
           <a href="#contact" onClick={() => setMenuOpen(false)}>
             Get Started
           </a>

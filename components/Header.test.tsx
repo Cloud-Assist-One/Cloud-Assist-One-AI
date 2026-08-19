@@ -33,4 +33,9 @@ describe('Header', () => {
     await user.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
   });
+
+  it('renders a Login link to the portal', () => {
+    render(<Header />);
+    expect(screen.getByRole('link', { name: /login/i })).toHaveAttribute('href', '/portal');
+  });
 });
