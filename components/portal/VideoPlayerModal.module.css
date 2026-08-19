@@ -1,0 +1,37 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 23, 48, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+}
+
+.content {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 48rem;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--color-fg);
+}
+
+.video {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
