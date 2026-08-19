@@ -32,7 +32,10 @@ export default function AdminUsers() {
   }
 
   useEffect(() => {
-    loadUsers();
+    async function initialLoad() {
+      await loadUsers();
+    }
+    initialLoad();
   }, []);
 
   function generatePassword() {
