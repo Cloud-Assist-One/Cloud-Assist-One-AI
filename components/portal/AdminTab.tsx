@@ -1,5 +1,6 @@
 import AdminUsers from './AdminUsers';
 import AdminUpload from './AdminUpload';
+import AdminContentList from './AdminContentList';
 import styles from './AdminTab.module.css';
 
 export default function AdminTab() {
@@ -12,6 +13,7 @@ export default function AdminTab() {
       <section>
         <h2>Content</h2>
         <AdminUpload />
+        <AdminContentList />
       </section>
     </div>
   );
