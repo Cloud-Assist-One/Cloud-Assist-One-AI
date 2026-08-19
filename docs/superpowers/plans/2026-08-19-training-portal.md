@@ -2139,6 +2139,11 @@ export default function AdminUsers() {
 
 `components/portal/AdminUsers.module.css`:
 ```css
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -2732,6 +2737,10 @@ export default function PortalTabs({ userId, role }: PortalTabsProps) {
 .tabList button[aria-selected='true'] {
   color: var(--color-accent);
   border-bottom-color: var(--color-accent);
+}
+
+.panel {
+  width: 100%;
 }
 ```
 
