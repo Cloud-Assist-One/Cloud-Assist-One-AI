@@ -61,7 +61,11 @@ describe('DocumentsTab', () => {
 
     await user.click(screen.getByRole('button', { name: /download/i }));
 
-    await waitFor(() => expect(createSignedUrl).toHaveBeenCalledWith('abc/guide.pdf', 60));
+    await waitFor(() =>
+      expect(createSignedUrl).toHaveBeenCalledWith('abc/guide.pdf', 60, {
+        download: 'Getting Started Guide',
+      })
+    );
     expect(clickSpy).toHaveBeenCalled();
 
     clickSpy.mockRestore();
@@ -90,5 +94,12 @@ describe('DocumentsTab', () => {
     await user.click(screen.getByRole('button', { name: /download/i }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not download/i);
+  });
+
+  it('shows an error when the document list fails to load', async () => {
+    order.mockResolvedValueOnce({ data: null, error: { message: 'permission denied' } });
+    render(<DocumentsTab />);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/could not load documents/i);
   });
 });

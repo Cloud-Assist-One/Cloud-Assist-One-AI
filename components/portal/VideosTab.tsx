@@ -16,34 +16,48 @@ export default function VideosTab({ userId }: VideosTabProps) {
   const [thumbnailUrls, setThumbnailUrls] = useState<Record<string, string>>({});
   const [playingVideo, setPlayingVideo] = useState<Video | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
       const supabase = createClient();
-      const [{ data: videoRows }, { data: watchRows }] = await Promise.all([
+      const [
+        { data: videoRows, error: videosError },
+        { data: watchRows, error: watchesError },
+      ] = await Promise.all([
         supabase.from('videos').select('*').order('created_at', { ascending: false }),
         supabase.from('video_watches').select('video_id').eq('user_id', userId),
       ]);
 
       if (cancelled) return;
 
+      if (videosError || watchesError) {
+        setLoadError('Could not load videos. Please refresh the page.');
+        setLoading(false);
+        return;
+      }
+
       const rows = videoRows ?? [];
       setVideos(rows);
       setWatchedIds(new Set((watchRows ?? []).map((w: { video_id: string }) => w.video_id)));
 
       const urls: Record<string, string> = {};
-      await Promise.all(
-        rows
-          .filter((v: Video) => v.thumbnail_path)
-          .map(async (v: Video) => {
-            const { data } = await supabase.storage
-              .from('training-videos')
-              .createSignedUrl(v.thumbnail_path as string, 3600);
-            if (data) urls[v.id] = data.signedUrl;
-          })
-      );
+      try {
+        await Promise.all(
+          rows
+            .filter((v: Video) => v.thumbnail_path)
+            .map(async (v: Video) => {
+              const { data } = await supabase.storage
+                .from('training-videos')
+                .createSignedUrl(v.thumbnail_path as string, 3600);
+              if (data) urls[v.id] = data.signedUrl;
+            })
+        );
+      } catch {
+        // Thumbnails are best-effort — fall back to placeholders rather than blocking the grid.
+      }
 
       if (!cancelled) {
         setThumbnailUrls(urls);
@@ -76,6 +90,10 @@ export default function VideosTab({ userId }: VideosTabProps) {
 
   if (loading) {
     return <p>Loading videos…</p>;
+  }
+
+  if (loadError) {
+    return <p role="alert">{loadError}</p>;
   }
 
   if (videos.length === 0) {

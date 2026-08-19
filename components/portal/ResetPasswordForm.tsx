@@ -24,7 +24,13 @@ export default function ResetPasswordForm() {
     const { error: updateError } = await supabase.auth.updateUser({ password });
 
     if (updateError) {
-      setError(updateError.message);
+      if (updateError.message.toLowerCase().includes('session')) {
+        setError(
+          'This reset link has expired or was opened in a different browser. Please request a new password reset email.'
+        );
+      } else {
+        setError(updateError.message);
+      }
       return;
     }
 

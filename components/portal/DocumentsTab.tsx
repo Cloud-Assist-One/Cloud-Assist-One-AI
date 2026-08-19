@@ -14,6 +14,7 @@ export function formatFileSize(bytes: number): string {
 export default function DocumentsTab() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [downloadError, setDownloadError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,15 +22,19 @@ export default function DocumentsTab() {
 
     async function loadDocuments() {
       const supabase = createClient();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('documents')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (!cancelled) {
+      if (cancelled) return;
+
+      if (error) {
+        setLoadError('Could not load documents. Please refresh the page.');
+      } else {
         setDocuments(data ?? []);
-        setLoading(false);
       }
+      setLoading(false);
     }
 
     loadDocuments();
@@ -43,7 +48,7 @@ export default function DocumentsTab() {
     const supabase = createClient();
     const { data, error } = await supabase.storage
       .from('training-documents')
-      .createSignedUrl(doc.storage_path, 60);
+      .createSignedUrl(doc.storage_path, 60, { download: doc.title });
 
     if (error || !data) {
       setDownloadError(`Could not download "${doc.title}". Please try again.`);
@@ -58,6 +63,10 @@ export default function DocumentsTab() {
 
   if (loading) {
     return <p>Loading documents…</p>;
+  }
+
+  if (loadError) {
+    return <p role="alert">{loadError}</p>;
   }
 
   if (documents.length === 0) {

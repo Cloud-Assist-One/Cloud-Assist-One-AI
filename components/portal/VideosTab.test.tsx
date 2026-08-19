@@ -89,4 +89,12 @@ describe('VideosTab', () => {
 
     expect(await screen.findByRole('dialog', { name: 'Intro' })).toBeInTheDocument();
   });
+
+  it('shows an error when videos fail to load', async () => {
+    videosOrder.mockResolvedValueOnce({ data: null, error: { message: 'permission denied' } });
+    watchesEq.mockResolvedValueOnce({ data: [] });
+    render(<VideosTab userId="user-1" />);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/could not load videos/i);
+  });
 });

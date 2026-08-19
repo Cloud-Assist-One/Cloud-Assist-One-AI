@@ -47,10 +47,7 @@ export default function VideoPlayerModal({ video, onClose }: VideoPlayerModalPro
         </button>
         <h2>{video.title}</h2>
         {error && <p role="alert">{error}</p>}
-        {signedUrl && (
-          // eslint-disable-next-line jsx-a11y/media-has-caption
-          <video src={signedUrl} controls autoPlay className={styles.video} />
-        )}
+        {signedUrl && <video src={signedUrl} controls autoPlay className={styles.video} />}
       </div>
     </div>
   );

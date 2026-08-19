@@ -40,9 +40,11 @@ export default function AdminUsers() {
 
   function generatePassword() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+    const randomValues = new Uint32Array(16);
+    window.crypto.getRandomValues(randomValues);
     let generated = '';
     for (let i = 0; i < 16; i += 1) {
-      generated += chars[Math.floor(Math.random() * chars.length)];
+      generated += chars[randomValues[i] % chars.length];
     }
     setPassword(generated);
   }
